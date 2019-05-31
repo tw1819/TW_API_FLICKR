@@ -20,6 +20,9 @@
         <button id="bobter">Obter</button>
         <button id="blimpar">Limpar</button>
     </div>
+    <div id="meteo">
+
+    </div>
     <div id="photos">
         qualquer coisa
     </div>
@@ -35,10 +38,41 @@
    //&format=rest
 
 
+   //http://api.openweathermap.org/data/2.5/weather?
+   //q=Viana%20do%20Castelo&
+   //appid=fa454439b36b644d49e751a9b0afbcfc&
+   //units=metric
+
+
+
     $("#bobter").click(function () {
         var tagpesquisa = $("#itag").val();
         if (tagpesquisa == "")  return;
         $("#itag").val("");
+
+        $.ajax({
+            url : "http://api.openweathermap.org/data/2.5/weather",
+            data : {
+                "q" : tagpesquisa,
+                "appid" : "fa454439b36b644d49e751a9b0afbcfc",
+                "units" : "metric",
+                "lang" : "pt"
+            },
+            method : "GET",
+            dataType : "JSON",
+            success : function (infometeo) {
+                console.log(infometeo);
+                var texto = 
+                    infometeo.weather[0].description + 
+                    " a temperatura atual é: " +
+                    infometeo.main.temp;
+
+                $("#meteo")
+                    .append($("<p>").html("info para:" + infometeo.name))
+                    .append($("<p>").html(texto));
+
+            }
+        });
         $.ajax({
             url : "https://www.flickr.com/services/rest/",
             data : {
