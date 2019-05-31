@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script-->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <style>
+        #photos img {
+            width : 150px;
+            border-radius : 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="controlo">
+        <input type="text" id="itag">
+        <button id="bobter">Obter</button>
+        <button id="blimpar">Limpar</button>
+    </div>
+    <div id="photos">
+        qualquer coisa
+    </div>
+
+    <script>
+   //URL: https://www.flickr.com/services/rest/
+   //?method=flickr.photos.search
+   //&api_key=dd9caf2bb711dcb364b85f99d10006bc
+   //&text=Viana+do+Castelo
+   //&extras=url_m
+   //&per_page=10//
+   //&page=1
+   //&format=rest
+
+
+    $("#bobter").click(function () {
+        var tagpesquisa = $("#itag").val();
+        if (tagpesquisa == "")  return;
+        $("#itag").val("");
+        $.ajax({
+            url : "https://www.flickr.com/services/rest/",
+            data : {
+                "method" : "flickr.photos.search",
+                "api_key" : "dd9caf2bb711dcb364b85f99d10006bc",
+                "text" : tagpesquisa,
+                "extras" : "url_m",
+                "per_page" : "10",
+                "page" : "1",
+                "format" : "json",
+                "nojsoncallback" : "1"
+            },
+            method : "GET",
+            dataType : "JSON",
+            success : function (infofotos) {
+                console.log(infofotos);
+                infofotos.photos.photo.forEach(foto => {
+                    var foto = $("<img>").attr("src",foto.url_m);
+                    $("#photos").append(foto);
+                });
+            }
+        });
+    });
+
+    $("#blimpar").click(function () {
+       $("#photos").html(""); //$("#photos").empty();
+    });
+
+
+
+
+    </script>
+</body>
+</html>
